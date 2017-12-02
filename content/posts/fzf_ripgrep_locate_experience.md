@@ -7,6 +7,7 @@ tags:
 title: "Effective file finding on Unix with locate, ripgrep and fzf"
 slug: "Fzf ripgrep locate"
 date: 2017-12-02T12:34:17Z
+ghcommentid = 1
 draft: true
 ---
 ##  My experience with Fzf ripgrep and locate
