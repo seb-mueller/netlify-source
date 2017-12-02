@@ -1,8 +1,9 @@
 title = "Sebs site"
-baseurl = "/"
+baseurl = "https://echsberde.netlify.com/"
 relativeurls = false
 languageCode = "en-us"
 theme = "hugo-lithium-theme"
+pygmentsStyle = "native"
 googleAnalytics = ""
 disqusShortname = ""
 ignoreFiles = ["\\.Rmd$", "\\.Rmarkdown", "_files$", "_cache$"]
@@ -15,10 +16,10 @@ ignoreFiles = ["\\.Rmd$", "\\.Rmarkdown", "_files$", "_cache$"]
     url = "/about/"
 [[menu.main]]
     name = "GitHub"
-    url = "https://github.com/rstudio/blogdown"
+    url = "https://github.com/seb-mueller"
 [[menu.main]]
-    name = "Twitter"
-    url = "https://twitter.com/rstudio"
+    name = "LinkedIn"
+    url = "https://www.linkedin.com/in/drsebmueller/"
 
 [params]
     description = "A website built through Hugo and blogdown."
