@@ -64,16 +64,18 @@ function DoGithubComments(comment_id, page_id)
                 });
 
                 // Setup comments button if there are more pages to display
-                var links = ParseLinkHeader(jqXHR.getResponseHeader("Link"));
-                if ("next" in links)
-                {
-                    $("#gh-load-comments").attr("onclick", "DoGithubComments(" + comment_id + "," + (page_id + 1) + ");");
-                    $("#gh-load-comments").show();
-                }
-                else
-                {
-                    $("#gh-load-comments").hide();
-                }
+                // var headerTmp = jqXHR.getResponseHeader('Link');
+                // var headerTmp = jqXHR.getAllResponseHeaders();
+                // var links = ParseLinkHeader(headerTmp);
+                // if ("next" in links)
+                // {
+                //     $("#gh-load-comments").attr("onclick", "DoGithubComments(" + comment_id + "," + (page_id + 1) + ");");
+                //     $("#gh-load-comments").show();
+                // }
+                // else
+                // {
+                //     $("#gh-load-comments").hide();
+                // }
             },
             error: function() {
                 $("#gh-comments-list").append("Comments are not open for this post yet.");
