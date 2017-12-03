@@ -1,17 +1,53 @@
 // use of ajax vs getJSON for headers use to get markdown (body vs body_htmml)
-// todo: new comment location, pages, configure issue url
+// todo: pages, configure issue url, open in new window?
 
-function DoGithubComments(comment_id)
+var CurrentPage = 0;
+
+function ParseLinkHeader(link)
 {
-    var url = "https://github.com/seb-mueller/netlify-source/issues/" + comment_id;
-    var api_url = "https://api.github.com/repos/seb-mueller/netlify-source/issues/" + comment_id + "/comments"
+    var entries = link.split(",");
+    var links = { };
+    for (var i in entries)
+    {
+        var entry = entries[i];
+        var link = { };
+        link.name = entry.match(/rel=\"([^\"]*)/)[1];
+        link.url = entry.match(/<([^>]*)/)[1];
+        link.page = entry.match(/page=(\d+).*$/)[1];
+        links[link.name] = link;
+    }
+    return links;
+}
 
-    $(document).ready(function () {
-        $.ajax(api_url, {
+function DoGithubComments(comment_id, page_id)
+{
+    var repo_name = "seb-mueller/netlify-source";
+
+    if (page_id === undefined)
+        page_id = 1;
+
+    var api_url = "https://api.github.com/repos/" + repo_name;
+    var api_issue_url = api_url + "/issues/" + comment_id;
+    var api_comments_url = api_url + "/issues/" + comment_id + "/comments" + "?page=" + page_id;
+
+    var url = "https://github.com/seb-mueller/netlify-source/issues/" + comment_id;
+
+    $(document).ready(function ()
+    {
+        $.getJSON(api_issue_url, function(data) {
+            NbComments = data.comments;
+        });
+
+        $.ajax(api_comments_url, {
             headers: {Accept: "application/vnd.github.v3.html+json"},
             dataType: "json",
-            success: function(comments) {
-                $("#gh-comments-list").append("Visit the <b><a href='" + url + "'>Github Issue</a></b> to comment on this post");
+            success: function(comments, textStatus, jqXHR) {
+
+                // Add post button to first page
+                if (page_id == 1)
+                    $("#gh-comments-list").append("<a href='" + url + "#new_comment_field' rel='nofollow' class='btn'>Post a comment on Github</a>");
+
+                // Individual comments
                 $.each(comments, function(i, comment) {
 
                     var date = new Date(comment.created_at);
@@ -26,6 +62,18 @@ function DoGithubComments(comment_id)
                     t += "</div>";
                     $("#gh-comments-list").append(t);
                 });
+
+                // Setup comments button if there are more pages to display
+                var links = ParseLinkHeader(jqXHR.getResponseHeader("Link"));
+                if ("next" in links)
+                {
+                    $("#gh-load-comments").attr("onclick", "DoGithubComments(" + comment_id + "," + (page_id + 1) + ");");
+                    $("#gh-load-comments").show();
+                }
+                else
+                {
+                    $("#gh-load-comments").hide();
+                }
             },
             error: function() {
                 $("#gh-comments-list").append("Comments are not open for this post yet.");
