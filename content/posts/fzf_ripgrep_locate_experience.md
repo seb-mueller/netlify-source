@@ -10,13 +10,12 @@ date: 2017-12-02T12:34:17Z
 ghcommentid: 1
 draft: true
 ---
-##  My experience with Fzf ripgrep and locate
+##  My experience with [Fzf](https://github.com/junegunn/fzf), [ripgrep](https://github.com/BurntSushi/ripgrep) and locate
 
 One of the most common task working on a computer is finding stuff. Usually, that either a file or file content.
 Since speeding this can really make a difference in terms of productivity, I thought to share my latest workflow.
 
 Say you want to find `myfile.txt` somewhere on the filesystem and edit it, leaving desktop search engines such as baloo out of the equation, I'd usually use the good old [find utils](https://www.gnu.org/software/findutils/manual/html%5Fmono/find.html#Overview)
-
 
 ## Relative vs absolute search
 The ideal solution would allow me to differentiate between relative (only search below current directory) and absolute (search from / or ~ etc).
@@ -109,22 +108,35 @@ Depending on what kind of search I want, I'd change the undlying fzf search-engi
 Note, the **fasted** would be the last alias (ffl) using locate + fzf but doesn't find files changed after the last `updatedb`.
 Once set, just hit ctrl-T to fire up the file finding:
 
+Yet another fzf way is to using [fuzzy completion](https://github.com/junegunn/fzf#fuzzy-completion-for-bash-and-zsh) using the ** notion which works out of the box.
+
+```bash
+nvim **<TAB> #relative path variant 
+nvim ~/**<TAB> #relative path variant 
+```
+This is probably the best solution since there is no need to set variables, but I haven't found out what the underlying search engine for this one is and how to change it.
+
+It is worth to mention that the latter approach not only works for filenames, but also directories etc. For example:
+
+```bash
+cd **<TAB>
+```
+only looks for directories below the current (relative) excluding files beeing aware what `cd` needs as argument.  
+
 
 Here you have it:
 
 ```bash
-nvim C^T
+nvim C^T #or
+nvim **<TAB>
 ```
 
+Of course there is much more to all of this, i.e. ripgrep was origially designed to search within files (which can also be used with fzf and would deserve an article on its own). 
+Also fzf has many more functions and applications which are beyond the scope of the article.
+
+Hope you could learn something. Also if you have any corrections/additions/improvements let me know in the comments below (requires github account).
 
 
-## Appendix
-excluding files/dirs
 
--g '!/dir2ignore'
-
-or put it in the .ignore file (containing a ignore list for ripgrep)
-
-echo "dir2ignore/" >> ~/.ignore
 
 
